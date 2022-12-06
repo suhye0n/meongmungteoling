@@ -29,3 +29,18 @@ void Print(int x)
             break;
     }
 }
+
+void error(char *msg) {
+    perror(msg);
+    exit(0);
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc != 3) {
+        fprintf(stderr, "%s <hostname> <port> \n", argv[0]);
+        exit(0);
+    }
+    hostname = argv[1];
+    portno = atoi(argv[2]);
+}
