@@ -6,19 +6,26 @@
 ### 멍뭉터링 기능
 - 애견 체온 측정
 - 애견 체온 상태를 앱 및 가방의 LED로 확인 가능
-- 앱에서 강아지 야간 산책 시 안전을 위한 LED ON/OFF 제어 기능
-- 앱에서 강아지 심신 안정을 위한 멜로디 ON/OFF 제어 기
+- 앱에서 강아지 야간 산책 시 안전을 위한 LED ON/OFF 제어 가능
+- 앱에서 강아지 심신 안정을 위한 멜로디 ON/OFF 제어 가능 
 
 ### 전체 시스템 구조
 - 하드웨어 구조
   - ![image](https://user-images.githubusercontent.com/63187994/205824080-2378694e-381e-49a3-9ee8-a6bb13150483.png)
 - 소프트웨어 구조
-  - 
+  - ![image](https://user-images.githubusercontent.com/63187994/205824222-822ba5aa-e314-4414-a717-0c503f3409cf.png)
 
 ### 개발 일정
+![image](https://user-images.githubusercontent.com/63187994/205824254-040b6d92-4bcb-47ad-a8c7-ee2f6f6f5ac1.png)
 
 ### 업무 분장
+- 나현진: 
+- 박수현: 
+- 전예지: 
 
 ### 개발 시 문제점 및 해결 방안
+- 
 
 ### 기능별 데모 영상
+- 체온 측정 기능
+- 
