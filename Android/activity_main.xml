@@ -6,24 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
+
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="107dp"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/editIp"
-                android:layout_width="wrap_content"
+                android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="20dp"
-                />
+                android:hint="192.168.35.93" />
 
             <Button
                 android:id="@+id/connect"
@@ -31,18 +39,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="30dp"
-                android:text="ip 연결"
-                />
+                android:text="ip 연결" />
 
             <Button
                 android:id="@+id/quit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="연결 종료"
-                />
+                android:text="연결 종료" />
 
         </LinearLayout>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
 
         <TextView
             android:id="@+id/currentLux"
@@ -68,31 +82,13 @@
             android:text="불러오는 중..."
             android:textColor="@color/black" />
 
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/outModeButton"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:text="불 끄기"
-                android:textSize="20dp"
-                android:visibility="visible"
-                android:layout_marginRight="15dp"
-                />
-
-            <Button
-                android:id="@+id/inModeButton"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:text="불 켜기"
-                android:textSize="20dp"
-                android:visibility="visible"
-                android:layout_marginLeft="15dp"
-                />
-
-        </GridLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar3"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
 
         <TextView
             android:id="@+id/logText"
@@ -105,6 +101,37 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             />
+
+        <AnalogClock
+            android:id="@+id/clock1"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content" />
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="87dp">
+
+            <Button
+                android:id="@+id/outModeButton"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_marginRight="15dp"
+                android:text="불 끄기"
+                android:textSize="20dp"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/inModeButton"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="불 켜기"
+                android:textSize="20dp"
+                android:visibility="visible" />
+
+        </GridLayout>
 
     </LinearLayout>
 
