@@ -27,6 +27,7 @@ import java.nio.ByteOrder;
 
 
 public class MainActivity extends AppCompatActivity {
+    TextView currentTemp;
 
     private enum LightType {ON, OFF};
 
@@ -66,14 +67,14 @@ public class MainActivity extends AppCompatActivity {
         connectButton = findViewById(R.id.connect);
         ip_edit = findViewById(R.id.editIp);
         quitButton = findViewById(R.id.quit);
-        luxText = findViewById(R.id.luxText);
+        luxText = (TextView)findViewById(R.id.luxText);
         logText = findViewById(R.id.logText);
         outModeButton = findViewById(R.id.outModeButton);
         inModeButton = findViewById(R.id.inModeButton);
 
-        //currentLux = 50;
+        //currentLux = -999;
         standardLux = 100;
-        //luxText.setText(luxText.getText());
+
         lightType = LightType.OFF;
 
         Button.OnClickListener onClickListener = new Button.OnClickListener() {
@@ -170,10 +171,10 @@ public class MainActivity extends AppCompatActivity {
                         while(true) {
 
                             Log.d("서버 데이터 읽기", "서버 데이터");
-                            currentLux = (int)dis.read();
+                            currentLux = (char)dis.read();
 
                             if(currentLux > 0) {
-                                Log.w("서버에서 받아온 값", ""+currentLux);
+                                Log.w("서버에서 받아온 온도 값", ""+currentLux);
                                 luxText.setText(String.valueOf(currentLux));
                             }
                             else if(currentLux == -1) {
