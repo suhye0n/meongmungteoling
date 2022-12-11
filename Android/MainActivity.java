@@ -19,45 +19,33 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-//import org.w3c.dom.Text;
-
 
 public class MainActivity extends AppCompatActivity {
-    TextView currentTemp;
-
     private enum LightType {ON, OFF};
 
     //UI
     private Button outModeButton;
     private Button inModeButton;
-    private Button connectButton;   // ip 받아오는 버튼
-    private  Button quitButton; //연결 종료 버튼
-    private EditText ip_edit;   // ip 입력하는 값
-    private TextView luxText;  // 서버로부터 받는 데이터
-    private TextView logText;
-    private ImageView lightPowerImage;
+    private Button connectButton;
+    private EditText ip_edit;
+    private TextView luxText;
+    private TextView statusText;
 
-    // 서버
-    // private String html = "";
     private Handler mHandler;
     private Socket socket;
     private DataOutputStream dos;
     private DataInputStream dis;
-
     private String ip = "192.168.0.6";
     private int port = 8080;
-
-
     private int currentLux;
     private int standardLux;
     private LightType lightType;
     private boolean isClick = false;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
         connectButton = findViewById(R.id.connect);
         ip_edit = findViewById(R.id.editIp);
-        quitButton = findViewById(R.id.quit);
         luxText = (TextView)findViewById(R.id.luxText);
-        logText = findViewById(R.id.logText);
-        outModeButton = findViewById(R.id.outModeButton);
-        inModeButton = findViewById(R.id.inModeButton);
+        statusText = (TextView)findViewById(R.id.statusText);
 
-        //currentLux = -999;
         standardLux = 100;
-
         lightType = LightType.OFF;
 
         Button.OnClickListener onClickListener = new Button.OnClickListener() {
@@ -82,63 +65,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 isClick = true;
                 switch (v.getId()) {
-                    case R.id.outModeButton:
-                        if(lightType == LightType.ON) {
-                            lightType = LightType.OFF;
-                            logText.setText("전원 OFF");
-                        }
-                        else {
-                            logText.setText("이미 불이 꺼져 있습니다");
-                        }
-
-                        break;
-
-                    case R.id.inModeButton :
-                        if(lightType == LightType.ON) {
-                            if(currentLux >= standardLux) {
-                                lightType = LightType.OFF;
-                                logText.setText("불 켜지 않아도 충분히 밝습니다");
-                            }
-                            else if(currentLux < standardLux) {
-                                logText.setText("이미 불이 켜져 있습니다");
-                            }
-                        }
-                        else {
-                            if(currentLux < standardLux) {
-                                lightType = LightType.ON;
-                                logText.setText("집콕모드! 전원 ON");
-
-                            }
-                            else if(currentLux >= standardLux) {
-                                logText.setText("이미 불이 꺼져 있습니다");
-                            }
-                        }
-                        break;
-
                     case R.id.connect :
                         connect();
                         break;
-
-                    case R.id.quit :
-                        try {
-                            socket.close();
-                        } catch (Exception e) {
-
-                        }
                 }
             }
         };
 
-        outModeButton.setOnClickListener(onClickListener);
-        inModeButton.setOnClickListener(onClickListener);
         connectButton.setOnClickListener(onClickListener);
-
     }
 
     public void connect() {
         mHandler = new Handler();
         Log.w("connect", "연결하는 중");
-
 
         Thread checkUpdate = new Thread() {
             public void run() {
@@ -165,17 +104,30 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("버퍼", "버퍼생성 잘됨");
 
                 while(i < 5) {
-
                     try {
-
                         while(true) {
-
                             Log.d("서버 데이터 읽기", "서버 데이터");
                             currentLux = (char)dis.read();
 
                             if(currentLux > 0) {
                                 Log.w("서버에서 받아온 온도 값", ""+currentLux);
                                 luxText.setText(String.valueOf(currentLux));
+
+                                byte[] data = null;
+                                //서버로 내보내기 위한 출력 스트림 뚫음
+                                OutputStream os = socket.getOutputStream();
+                                //출력 스트림에 데이터 씀
+                                os.write(0x01);
+                                //보냄
+                                os.flush();
+
+                                if (currentLux >= 37 || currentLux <= 39) {
+                                    statusText.setText("지금 우리 멍뭉이는 정상 체온!");
+                                } else if (currentLux < 37.5) {
+                                    statusText.setText("멍뭉이의 몸이 차가워요!");
+                                } else {
+                                    statusText.setText("멍뭉이의 몸이 뜨거워요!");
+                                }
                             }
                             else if(currentLux == -1) {
                                 Log.w("버퍼의 끝까지 도달", "버퍼 종료");
@@ -197,14 +149,12 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     } catch (Exception e) {
-
                     }
 
                 }
                 try {
                     socket.close();
                 } catch (Exception e) {
-
                 }
 
             }
