@@ -12,14 +12,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="107dp"
@@ -27,10 +19,11 @@
 
             <EditText
                 android:id="@+id/editIp"
-                android:layout_width="125dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="20dp"
+                android:gravity="center"
                 android:hint="192.168.35.93" />
 
             <Button
@@ -41,19 +34,12 @@
                 android:layout_marginRight="30dp"
                 android:text="ip 연결" />
 
-            <Button
-                android:id="@+id/quit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="연결 종료" />
-
         </LinearLayout>
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme" />
@@ -62,7 +48,7 @@
             android:id="@+id/currentLux"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="현재 온도"
+            android:text="멍뭉이 현재 온도"
             android:textSize="25dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
@@ -74,64 +60,25 @@
             android:id="@+id/luxText"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
             android:layout_gravity="center_horizontal"
-            android:textAlignment="center"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="3dp"
             android:text="불러오는 중..."
-            android:textColor="@color/black" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar3"
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30dp" />
 
         <TextView
-            android:id="@+id/logText"
-            android:layout_width="wrap_content"
+            android:id="@+id/statusText"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="20dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            />
-
-        <AnalogClock
-            android:id="@+id/clock1"
-            android:layout_width="205dp"
-            android:layout_height="wrap_content" />
-
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="87dp">
-
-            <Button
-                android:id="@+id/outModeButton"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:layout_marginRight="15dp"
-                android:text="불 끄기"
-                android:textSize="20dp"
-                android:visibility="visible" />
-
-            <Button
-                android:id="@+id/inModeButton"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="불 켜기"
-                android:textSize="20dp"
-                android:visibility="visible" />
-
-        </GridLayout>
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="30dp"
+            android:text="불러오는 중..."
+            android:textAlignment="center"
+            android:textColor="@color/purple_200"
+            android:textSize="20dp" />
 
     </LinearLayout>
 
