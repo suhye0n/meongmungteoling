@@ -115,20 +115,21 @@ void turn_on_buzzer(int buzz_switch)
 
 void *thread_led(void *arg)
 {
-    int preVal = 0;         // 이전 밝기
-    int curVal = 0;         // 현재 밝기
+    int preVal = 0;
+    int curVal = 0;
     int led_adcChannel = 2;
     int duty;
 
     while(1)
     {
         pthread_mutex_lock(&mutex);
-        wiringPiI2CWrite(i2c_fd, 0x00 | led_adcChannel);
+        wiringPiI2CWrite(i2c_fd, 0x40 | led_adcChannel);
 
         preVal = wiringPiI2CRead(i2c_fd);
         curVal = wiringPiI2CRead(i2c_fd);
 
         duty = curVal/100*1024;
+        printf("밝기: %d \n", duty);
         pinMode(LED, PWM_OUTPUT);
 
         pwmWrite(LED, duty);
@@ -141,8 +142,8 @@ void *thread_led(void *arg)
 
 void *thread_temp(void *arg)
 {
-    int preVal = 0;         // 이전 온도
-    int curVal = 0;         // 현재 온도
+    int preVal = 0;
+    int curVal = 0;
     int temp_adcChannel = 1;
 
     int val = 0;
@@ -153,24 +154,21 @@ void *thread_temp(void *arg)
     while(1) 
     {
         pthread_mutex_lock(&mutex);
-        wiringPiI2CWrite(i2c_fd, 0x00 | temp_adcChannel);
+        wiringPiI2CWrite(i2c_fd, 0x41 | temp_adcChannel);
         preVal = wiringPiI2CRead(i2c_fd);
         curVal = wiringPiI2CRead(i2c_fd);
+        curVal = (255-curVal)*1.2;
 
-        int test = 38;
-        // char lowbyte = (curVal & 255);
-        // char highbyte = ((curVal >> 8) & 255);
-        char lowbyte = (test & 255);
-        char highbyte = ((test >> 8) & 255);
+        char lowbyte = (curVal & 255);
+        char highbyte = ((curVal >> 8) & 255);
         char sd = (highbyte << 8) + lowbyte;
 
-        //printf("이전: %d, ", preVal);
         //printf("현재: %d \n", curVal);
-        printf("테스트: %d \n", sd);
+        //printf("테스트: %d \n", sd);
 
         send(clnt_sock, (char*)&sd, sizeof(sd), 0);
 
-        if(test <= 37 || test >= 39)
+        if(curVal <= 37 || curVal >= 39)
         {
             buzz_switch = 1;
             turn_on_buzzer(buzz_switch);
@@ -181,7 +179,7 @@ void *thread_temp(void *arg)
             turn_on_buzzer(buzz_switch);
         }
         pthread_mutex_unlock(&mutex);
-        delay(500);
+        delay(5000);
     }
 }
 
