@@ -145,12 +145,9 @@ void *thread_temp(void *arg)
     int preVal = 0;
     int curVal = 0;
     int temp_adcChannel = 1;
-
     int val = 0;
     float outVoltage = 0.0;
-
     int buzz_switch = 0;
-
     while(1) 
     {
         pthread_mutex_lock(&mutex);
@@ -158,16 +155,10 @@ void *thread_temp(void *arg)
         preVal = wiringPiI2CRead(i2c_fd);
         curVal = wiringPiI2CRead(i2c_fd);
         curVal = (255-curVal)*1.2;
-
         char lowbyte = (curVal & 255);
         char highbyte = ((curVal >> 8) & 255);
         char sd = (highbyte << 8) + lowbyte;
-
-        //printf("현재: %d \n", curVal);
-        //printf("테스트: %d \n", sd);
-
         send(clnt_sock, (char*)&sd, sizeof(sd), 0);
-
         if(curVal <= 37 || curVal >= 39)
         {
             buzz_switch = 1;
