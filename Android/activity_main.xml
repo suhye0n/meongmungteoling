@@ -24,7 +24,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="20dp"
                 android:gravity="center"
-                android:hint="192.168.35.93" />
+                android:hint="IP 주소 연결" />
 
             <Button
                 android:id="@+id/connect"
