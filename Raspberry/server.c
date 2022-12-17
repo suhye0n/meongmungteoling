@@ -19,7 +19,6 @@ static const char* I2C_DEV = "/dev/i2c-1";
 
 int GPIO_control_setup(void);              // GPIO setup 함수
 void *thread_led(void *arg);               // LED 제어 함수     (클라이언트 -> 서버)
-void turn_on_buzzer(int buzz_switch);      // BUZZER 제어 함수  (서버)
 void *thread_temp(void *arg);              // 온도 함수         (서버 -> 클라이언트)
 void error_handling(char *message);        // 에러 발생 유무 확인 함수
 
