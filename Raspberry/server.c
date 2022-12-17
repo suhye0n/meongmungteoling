@@ -11,7 +11,8 @@
 #include <pthread.h>
 
 #define SLAVE_ADDR_01 0x48
-#define BUZZ 23
+#define GREEN 14
+#define RED 15
 #define LED 18
 
 static const char* I2C_DEV = "/dev/i2c-1";
@@ -57,6 +58,7 @@ int main(void) {
 // GPIO setup
 int GPIO_control_setup(void)
 {
+    //if(wiringPiSetupGpio() < 0)
     if(wiringPiSetupGpio() < 0)
     {
         printf("wiringPiSetup() is failed\n");
@@ -98,18 +100,21 @@ int GPIO_control_setup(void)
     printf("!!!! 소켓 연결됐당 !!!! \n");
 }
 
-void turn_on_buzzer(int buzz_switch)
+void turn_on_sos(int sos_switch)
 {
-    pinMode(BUZZ, OUTPUT);
+    pinMode(GREEN, OUTPUT);
+    //pinMode(RED, OUTPUT);
 
-    if(buzz_switch == 1)
+    if(sos_switch == 1)
     {
-        digitalWrite(BUZZ, HIGH);
+        digitalWrite(GREEN, LOW);
+        digitalWrite(RED, HIGH);
         printf("강아지의 체온에 이상이 있습니다\n");
     }
-    else if(buzz_switch == 0)
+    else if(sos_switch == 0)
     {
-        digitalWrite(BUZZ,LOW);
+        digitalWrite(RED,LOW);
+        digitalWrite(GREEN,HIGH);
     }
 }
 
@@ -118,7 +123,7 @@ void *thread_led(void *arg)
     int preVal = 0;
     int curVal = 0;
     int led_adcChannel = 2;
-    int duty;
+    int threshold = 239; 
 
     while(1)
     {
@@ -128,14 +133,15 @@ void *thread_led(void *arg)
         preVal = wiringPiI2CRead(i2c_fd);
         curVal = wiringPiI2CRead(i2c_fd);
 
-        duty = curVal/100*1024;
-        printf("밝기: %d \n", duty);
-        pinMode(LED, PWM_OUTPUT);
+        printf("%d \n", curVal);
 
-        pwmWrite(LED, duty);
+        pinMode(LED, PWM_OUTPUT);
+        
+        if(curVal < threshold) pwmWrite(LED, 0);
+        else pwmWrite(LED, 1024);
 
         pthread_mutex_unlock(&mutex);
-        delay(500);
+        delay(900);
     }
     return 0;
 }
@@ -145,29 +151,35 @@ void *thread_temp(void *arg)
     int preVal = 0;
     int curVal = 0;
     int temp_adcChannel = 1;
+
     int val = 0;
     float outVoltage = 0.0;
-    int buzz_switch = 0;
+
+    int sos_switch = 0;
+
     while(1) 
     {
         pthread_mutex_lock(&mutex);
         wiringPiI2CWrite(i2c_fd, 0x41 | temp_adcChannel);
         preVal = wiringPiI2CRead(i2c_fd);
         curVal = wiringPiI2CRead(i2c_fd);
-        curVal = (255-curVal)*1.2;
+        curVal = (255-curVal)*1.9-17;
+
         char lowbyte = (curVal & 255);
         char highbyte = ((curVal >> 8) & 255);
         char sd = (highbyte << 8) + lowbyte;
+
         send(clnt_sock, (char*)&sd, sizeof(sd), 0);
-        if(curVal <= 37 || curVal >= 39)
+
+        if(sd < 37 || sd > 39)
         {
-            buzz_switch = 1;
-            turn_on_buzzer(buzz_switch);
+            sos_switch = 1;
+            turn_on_sos(sos_switch);
         }
         else
         {
-            buzz_switch = 0;
-            turn_on_buzzer(buzz_switch);
+            sos_switch = 0;
+            turn_on_sos(sos_switch);
         }
         pthread_mutex_unlock(&mutex);
         delay(5000);
