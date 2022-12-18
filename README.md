@@ -28,4 +28,4 @@
   - 해결 방안: 정수값을 shift 연산을 통하여 byte 형식으로 바꾸어 전송하여 해결함
 
 ### 데모 영상
-https://user-images.githubusercontent.com/63187994/208288839-12356be1-f429-441b-b340-d91ad5f53343.mp4
+https://user-images.githubusercontent.com/63187994/208288892-94bef30d-5abf-4f23-833c-7c92dc117d8d.mp4
